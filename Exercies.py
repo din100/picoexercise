@@ -1,26 +1,29 @@
 import machine
 
-#setup the onboard LED Pin as an output
-LED = machine.Pin(25,machine.Pin.OUT)
-Button = machine.Pin(0,machine.Pin.IN,machine.Pin.PULL_DOWN)
-LEDState = False
-
-#This IRQ Handlers toggles the variables we use to light the
-#LED.It should, but doesn't check which pin raised the IRQ,
-#as we only have 1 pin wired.
+#Setup 2 didgital imputs for buttons
+But  tonA = machine.Pin(0,machine.Pin.IN,
+                        machine.Pin.PULL_DOWN)
+ButtonB = machine.Pin(1,machine.Pin.IN,
+                        machine.Pin.PULL_DOWN)
+#Setup a PWM out put
+Buzzer = machine.PWM(machine.Pin(15))
+Buzzer.duty_u16(32767) # make it 50% duty cycle
+Frequency= 1000
 
 def ButtonIRQHandler(pin):
-    global LEDState
-    if LEDState == True:
-        LEDState = False
-    else:
-        LEDState = True
+    global Frequency
+    if pin == ButtonA: #up the frequency
+        if Frequency < 2000:
+            Frequency += 50
+        elif pin == ButtonB: #lower the freqncy
+            if Frequency > 100:
+                frequency -=50
 
-
-#setup the IRQ and hook it to the handler
-Button.irq(trigger=machine.Pin.IRQ_RISING,handler=ButtonIRQH  andler)
-
-#Now loop and light the LED with the LED state
+#setup the IRQ and the hock it to the nadlers
+ButtonA.irq(trigger = machine.Pin.IRQ_RISING,
+            handler = ButtonIRQHandler)
+ButtonB.irq(trigger = machine.Pin.IRQ_RISING,
+            handler = ButtonIRQHandler)
 
 while True:
-    LED.value(LEDState)
+    Buzzer.freq(Frequency) to 500
