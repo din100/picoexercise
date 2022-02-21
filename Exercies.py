@@ -26,4 +26,4 @@ ButtonB.irq(trigger = machine.Pin.IRQ_RISING,
             handler = ButtonIRQHandler)
 
 while True:
-    Buzzer.freq(Frequency) to 500
+    Buzzer.freq(Frequency) to 50000
